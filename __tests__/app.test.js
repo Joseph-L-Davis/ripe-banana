@@ -1,11 +1,10 @@
-import pool from '../lib/utils/pool.js';
-import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
+import sequelize from '../lib/utils/db.js';
 
 describe('demo routes', () => {
   beforeEach(() => {
-    return setup(pool);
+    return sequelize.sync({ force: true });
   });
 
   it('POST a new studio', async () => {

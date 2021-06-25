@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import sequelize from '../lib/utils/db.js';
 import Studio from '../lib/models/Studio.js';
+import Reviewer from '../lib/models/Reviewer';
 
 describe.skip('Studio routes', () => {
   beforeEach(() => {
@@ -225,4 +226,23 @@ describe('Reviewer routes', () => {
     expect(res.body).toEqual([dude.body, dudette.body]);
   });
 
+  it('update a reviewer via PUT', async () => {
+    const karen = await Reviewer.create({
+      name: 'kArEn',
+      company: 'aRe rEfIlLs fReE? INC'
+    });
+    
+    const updatedKaren = await request(app)
+      .put('/api/v1/reviewers/1')
+      .send({
+        name: 'KAREN',
+        company: 'ARE REFILLS FREE? inc'
+      });
+
+    expect(updatedKaren.body).toEqual({
+      ...karen.toJSON(),
+        
+    });
+
+  });
 });

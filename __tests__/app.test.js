@@ -87,4 +87,22 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual([J, K, A]);
   });
+
+  it('make a change to a studio PUT', async () => {
+    const A = await request(app)
+      .post('/api/v1/studios')
+      .send({
+        name: 'Studio A',
+        city: 'Kansas City',
+        state: 'Kansas',
+        country: 'USA'
+      });
+
+    A.state = 'Missouri';
+
+    const res = await request(app)
+      .put('/api/v1/studios/1');
+
+    expect(res.body).toEqual(A);
+  });
 });

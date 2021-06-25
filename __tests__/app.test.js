@@ -249,4 +249,18 @@ describe('Reviewer routes', () => {
     });
 
   });
+
+  it('DELETE a stinkin reviewer', async () => {
+    const olderKaren = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+    
+    const res = await request(app)
+      .delete(`/api/v1/reviewers/${olderKaren.id}`);
+
+    expect(res.body).toEqual(olderKaren.body);
+  });
 });

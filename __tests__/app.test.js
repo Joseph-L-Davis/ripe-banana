@@ -3,7 +3,7 @@ import app from '../lib/app.js';
 import sequelize from '../lib/utils/db.js';
 import Studio from '../lib/models/Studio.js';
 
-describe('demo routes', () => {
+describe.skip('Studio routes', () => {
   beforeEach(() => {
     return sequelize.sync({ force: true });
   });
@@ -134,4 +134,30 @@ describe('demo routes', () => {
     expect(res.body).not.toEqual(studioJ.body);
 
   });
+});
+
+describe('Actor routes', () => {
+  beforeEach(() => {
+    return sequelize.sync({ force: true });
+  });
+
+  it('POST new Actor', async () => {
+    const res = await request(app)
+      .post('/api/v1/actors')
+      .send({
+        name: 'Jimmy dean',
+        dob: '1988-09-29T00:00:00.000Z',
+        pob: 'Portland'
+      });
+
+    expect(res.body).toEqual({
+      id: 1,
+      name: 'Jimmy dean',
+      dob: '1988-09-29T00:00:00.000Z',
+      pob: 'Portland',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
 });

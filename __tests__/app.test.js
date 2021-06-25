@@ -127,17 +127,11 @@ describe('demo routes', () => {
         state: 'New York',
         country: 'USA'
       });
-    console.log(studioJ.body);
-
-    const res = await Studio.destroy(studioJ.body, {
-      where: {
-        id: 1
-      }
-    });
-    request(app)
+    
+    const res = await request(app)
       .delete(`/api/v1/studios/${studioJ.id}`);
 
-    expect(res.body).toEqual(studioJ.body);
+    expect(res.body).not.toEqual(studioJ.body);
 
   });
 });

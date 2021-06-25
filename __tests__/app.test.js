@@ -107,7 +107,6 @@ describe('demo routes', () => {
         country: 'USA'
       });
 
-      console.log(updatedA.body);
     expect(updatedA.body).toEqual({
       ...A.toJSON(),
       name: 'Studio A',
@@ -117,5 +116,28 @@ describe('demo routes', () => {
       updatedAt: expect.any(String),
       createdAt: expect.any(String)
     });
+  });
+
+  it('DELETE a studio by ID', async () => {
+    const studioJ = await request(app)
+      .post('/api/v1/studios')
+      .send({
+        name: 'Studio J',
+        city: 'New York',
+        state: 'New York',
+        country: 'USA'
+      });
+    console.log(studioJ.body);
+
+    const res = await Studio.destroy(studioJ.body, {
+      where: {
+        id: 1
+      }
+    });
+    request(app)
+      .delete(`/api/v1/studios/${studioJ.id}`);
+
+    expect(res.body).toEqual(studioJ.body);
+
   });
 });

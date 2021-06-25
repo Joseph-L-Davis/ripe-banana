@@ -3,6 +3,7 @@ import app from '../lib/app.js';
 import sequelize from '../lib/utils/db.js';
 import Studio from '../lib/models/Studio.js';
 import Actor from '../lib/models/Actor.js';
+import Reviewer from '../lib/models/Reviewer';
 
 describe('Studio routes', () => {
   beforeEach(() => {
@@ -188,14 +189,14 @@ describe('Actor routes', () => {
       .post('/api/v1/actors')
       .send({
         name: 'Hugh Jackman',
-        dob: 10,
+        dob: '1970-01-01T00:00:00.010Z',
         pob: 'Australia'
       });
    
     const res = await request(app)
-      .get('/api/v1/actors/1');
+      .get('/api/v1/actors');
 
-    expect(res.body).toEqual(Hugh.body);
+    expect(res.body).toEqual([Hugh.body]);
 
   });
 
@@ -241,4 +242,106 @@ describe('Actor routes', () => {
     expect(res.body).not.toEqual(Lauren.body);
   });
 
+});
+
+describe('Reviewer routes', () => {
+  beforeEach(() => {
+    return sequelize.sync({ force: true });
+  });
+
+  it('POST new reviewer', async () => {
+    const res = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    expect(res.body).toEqual({
+      name: 'Rude Human',
+      company: 'Only The Worst Inc',
+      id: 1,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
+  it('GET reviewer by ID', async () => {
+    await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    const res = await request(app)
+      .get('/api/v1/reviewers/1');
+
+    expect(res.body).toEqual({
+      name: 'Rude Human',
+      company: 'Only The Worst Inc',
+      id: 1,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
+  it('GET all reviewers', async () => {
+    const dude = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+      
+    const dudette = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'More Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    const res = await request(app)
+      .get('/api/v1/reviewers');
+
+    expect(res.body).toEqual([dude.body, dudette.body]);
+  });
+
+  it('update a reviewer via PUT', async () => {
+    const karen = await Reviewer.create({
+      name: 'kArEn',
+      company: 'aRe rEfIlLs fReE? INC'
+    });
+    
+    const updatedKaren = await request(app)
+      .put('/api/v1/reviewers/1')
+      .send({
+        name: 'KAREN',
+        company: 'ARE REFILLS FREE? inc'
+      });
+
+    expect(updatedKaren.body).toEqual({
+      ...karen.toJSON(),
+      name: 'KAREN',
+      company: 'ARE REFILLS FREE? inc',
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
+        
+    });
+
+  });
+
+  it('DELETE a stinkin reviewer', async () => {
+    const olderKaren = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+    
+    const res = await request(app)
+      .delete(`/api/v1/reviewers/${olderKaren.id}`);
+
+    expect(res.body).not.toEqual(olderKaren.body);
+  });
 });

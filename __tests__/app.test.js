@@ -204,4 +204,25 @@ describe('Reviewer routes', () => {
     });
   });
 
+  it('GET all reviewers', async () => {
+    const dude = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+      
+    const dudette = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'More Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    const res = await request(app)
+      .get('/api/v1/reviewers');
+
+    expect(res.body).toEqual([dude.body, dudette.body]);
+  });
+
 });

@@ -2,8 +2,9 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import sequelize from '../lib/utils/db.js';
 import Studio from '../lib/models/Studio.js';
+import Actor from '../lib/models/Actor.js';
 
-describe.skip('Studio routes', () => {
+describe('Studio routes', () => {
   beforeEach(() => {
     return sequelize.sync({ force: true });
   });
@@ -182,12 +183,12 @@ describe('Actor routes', () => {
     });
   });
 
-  it.only('finds all actors via GET', async () => {
+  it('finds all actors via GET', async () => {
     const Hugh = await request(app)
       .post('/api/v1/actors')
       .send({
         name: 'Hugh Jackman',
-        dob: 1969 - 12 - 31,
+        dob: 10,
         pob: 'Australia'
       });
    
@@ -196,6 +197,48 @@ describe('Actor routes', () => {
 
     expect(res.body).toEqual(Hugh.body);
 
+  });
+
+  it('make a change to actors via PUT', async () => {
+    const Melissa = await Actor.create({
+      name: 'Melissa McCarthy',
+      dob:'1988-09-29T00:00:00.000Z',
+      pob: 'Illinois'
+    });
+   
+    const updatedMelissa = await request(app)
+      .put('/api/v1/actors/1')
+      .send({
+        name: 'Melissa McCarthy',
+        dob:'1988-09-29T00:00:00.000Z',
+        pob: 'New York',
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String)
+      });
+     
+    expect(updatedMelissa.body).toEqual({
+      ...Melissa.toJSON(),
+      name: 'Melissa McCarthy',
+      dob:'1988-09-29T00:00:00.000Z',
+      pob: 'Illinois',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
+  it('DELETE an actor by ID', async () => {
+    const Lauren = await request(app)
+      .post('/api/v1/actors')
+      .send({
+        name: 'Lauren Graham',
+        dob: 1969 - 12 - 31,
+        pob: 'Hawaii'
+      });
+
+    const res = await request(app)
+      .delete(`/api/v1/actors/${Lauren}`);
+
+    expect(res.body).not.toEqual(Lauren.body);
   });
 
 });

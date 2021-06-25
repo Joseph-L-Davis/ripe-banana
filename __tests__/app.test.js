@@ -241,6 +241,10 @@ describe('Reviewer routes', () => {
 
     expect(updatedKaren.body).toEqual({
       ...karen.toJSON(),
+      name: 'KAREN',
+      company: 'ARE REFILLS FREE? inc',
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String)
         
     });
 

@@ -184,4 +184,24 @@ describe('Reviewer routes', () => {
     });
   });
 
+  it('GET reviewer by ID', async () => {
+    const reviewer = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    const res = await request(app)
+      .get('/api/v1/reviewers/1');
+
+    expect(res.body).toEqual({
+      name: 'Rude Human',
+      company: 'Only The Worst Inc',
+      id: 1,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
 });

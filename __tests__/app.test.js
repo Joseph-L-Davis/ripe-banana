@@ -88,7 +88,7 @@ describe('demo routes', () => {
     expect(res.body).toEqual([J.body, K.body, A.body]);
   });
 
-  it.skip('make a change to a studio PUT', async () => {
+  it('make a change to a studio PUT', async () => {
     const A = await request(app)
       .post('/api/v1/studios')
       .send({

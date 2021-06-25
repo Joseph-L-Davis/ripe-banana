@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../lib/app.js';
 import sequelize from '../lib/utils/db.js';
+import Studio from '../lib/models/Studio.js';
 
 describe('demo routes', () => {
   beforeEach(() => {
@@ -89,8 +90,16 @@ describe('demo routes', () => {
   });
 
   it('make a change to a studio PUT', async () => {
-    const A = await request(app)
-      .post('/api/v1/studios')
+    const A = await Studio.create({         
+      name: 'Studio A',
+      city: 'seattle',
+      state: 'washington',
+      country: 'USA' 
+    });
+    
+    
+    const updatedA = await request(app)
+      .put('/api/v1/studios/1')
       .send({
         name: 'Studio A',
         city: 'Kansas City',
@@ -98,11 +107,15 @@ describe('demo routes', () => {
         country: 'USA'
       });
 
-    A.state = 'Missouri';
-
-    const res = await request(app)
-      .put('/api/v1/studios/1');
-
-    expect(res.body).toEqual(A);
+      console.log(updatedA.body);
+    expect(updatedA.body).toEqual({
+      ...A.toJSON(),
+      name: 'Studio A',
+      city: 'Kansas City',
+      state: 'Kansas',
+      country: 'USA',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
   });
 });

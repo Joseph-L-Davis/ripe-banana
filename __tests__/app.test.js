@@ -185,7 +185,7 @@ describe('Reviewer routes', () => {
   });
 
   it('GET reviewer by ID', async () => {
-    const reviewer = await request(app)
+    await request(app)
       .post('/api/v1/reviewers')
       .send({
         name: 'Rude Human',

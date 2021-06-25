@@ -26,29 +26,30 @@ describe('demo routes', () => {
       updatedAt: expect.any(String),
       createdAt: expect.any(String)
     });
+  });
 
-    it('finds a studio by ID', async () => {
-      await request(app)
-        .post('/api/v1/studios')
-        .send({
-          name: 'Studio J',
-          city: 'New York',
-          state: 'New York',
-          country: 'USA'
-        });
-
-      const res = await request(app)
-        .get('/api/v1/studios/1');
-
-      expect(res.body).toEqual({
-        id: 1,
+  it('finds a studio by ID', async () => {
+    await request(app)
+      .post('/api/v1/studios')
+      .send({
         name: 'Studio J',
         city: 'New York',
         state: 'New York',
-        country: 'USA',
-        updatedAt: expect.any(String),
-        createdAt: expect.any(String)
+        country: 'USA'
       });
+
+    const res = await request(app)
+      .get('/api/v1/studios/1');
+
+    expect(res.body).toEqual({
+      id: 1,
+      name: 'Studio J',
+      city: 'New York',
+      state: 'New York',
+      country: 'USA',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
     });
+    
   });
 });

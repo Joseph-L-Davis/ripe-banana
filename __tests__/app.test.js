@@ -136,7 +136,7 @@ describe.skip('Studio routes', () => {
   });
 });
 
-describe('Actor routes', () => {
+describe.skip('Actor routes', () => {
   beforeEach(() => {
     return sequelize.sync({ force: true });
   });
@@ -155,6 +155,30 @@ describe('Actor routes', () => {
       name: 'Jimmy dean',
       dob: '1988-09-29T00:00:00.000Z',
       pob: 'Portland',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
+});
+
+describe('Reviewer routes', () => {
+  beforeEach(() => {
+    return sequelize.sync({ force: true });
+  });
+
+  it('POST new reviewer', async () => {
+    const res = await request(app)
+      .post('/api/v1/reviewers')
+      .send({
+        name: 'Rude Human',
+        company: 'Only The Worst Inc'
+      });
+
+    expect(res.body).toEqual({
+      name: 'Rude Human',
+      company: 'Only The Worst Inc',
+      id: 1,
       updatedAt: expect.any(String),
       createdAt: expect.any(String)
     });

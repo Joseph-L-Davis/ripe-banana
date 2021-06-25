@@ -160,4 +160,26 @@ describe('Actor routes', () => {
     });
   });
 
+  it('finds actor by id via GET', async () => {
+    await request(app)
+      .post('/api/v1/actors')
+      .send({
+        name: 'Jimmy dean',
+        dob: '1988-09-29T00:00:00.000Z',
+        pob: 'Portland'
+      });
+
+    const res = await request(app) 
+      .get('/api/v1/actors/1');
+
+    expect(res.body).toEqual({
+      id: 1, 
+      name: 'Jimmy dean',
+      dob: '1988-09-29T00:00:00.000Z',
+      pob: 'Portland',
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
 });

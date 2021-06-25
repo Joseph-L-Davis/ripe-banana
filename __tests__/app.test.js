@@ -182,4 +182,20 @@ describe('Actor routes', () => {
     });
   });
 
+  it.only('finds all actors via GET', async () => {
+    const Hugh = await request(app)
+      .post('/api/v1/actors')
+      .send({
+        name: 'Hugh Jackman',
+        dob: 1969 - 12 - 31,
+        pob: 'Australia'
+      });
+   
+    const res = await request(app)
+      .get('/api/v1/actors/1');
+
+    expect(res.body).toEqual(Hugh.body);
+
+  });
+
 });

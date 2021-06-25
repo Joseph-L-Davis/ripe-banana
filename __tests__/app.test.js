@@ -52,4 +52,39 @@ describe('demo routes', () => {
     });
     
   });
+
+  it('get all studios', async () => {
+    const J = await request(app)
+      .post('/api/v1/studios')
+      .send({
+        name: 'Studio J',
+        city: 'New York',
+        state: 'New York',
+        country: 'USA'
+      });
+    const K = await request(app)
+      .post('/api/v1/studios')
+      .send({
+        name: 'Studio K',
+        city: 'New York',
+        state: 'Kansas',
+        country: 'USA'
+      });
+    
+    const A = await request(app)
+      .post('/api/v1/studios')
+      .send({
+        name: 'Studio A',
+        city: 'Kansas City',
+        state: 'Kansas',
+        country: 'USA'
+      });
+
+    const res = await request(app)
+      .get('/api/v1/studios');
+
+    console.log(res.req.data);
+
+    expect(res.body).toEqual([J, K, A]);
+  });
 });

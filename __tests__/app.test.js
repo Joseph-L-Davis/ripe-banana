@@ -179,7 +179,7 @@ describe('Actor routes', () => {
     });
   });
 
-  it.only('finds all actors via GET', async () => {
+  it('finds all actors via GET', async () => {
     await Actor.bulkCreate(
       [{
         name: 'Hugh Jackman',
@@ -200,10 +200,10 @@ describe('Actor routes', () => {
 
   });
 
-  it('make a change to actors via PUT', async () => {
+  it.only('make a change to actors via PUT', async () => {
     const Melissa = await Actor.create({
       name: 'Melissa McCarthy',
-      dob:'1988-09-29T00:00:00.000Z',
+      dob: '1988-09-29T00:00:00.000Z',
       pob: 'Illinois'
     });
    
@@ -212,9 +212,7 @@ describe('Actor routes', () => {
       .send({
         name: 'Melissa McCarthy',
         dob:'1988-09-29T00:00:00.000Z',
-        pob: 'New York',
-        updatedAt: expect.any(String),
-        createdAt: expect.any(String)
+        pob: 'Illinois',
       });
      
     expect(updatedMelissa.body).toEqual({

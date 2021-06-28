@@ -200,7 +200,7 @@ describe('Actor routes', () => {
 
   });
 
-  it.only('make a change to actors via PUT', async () => {
+  it('make a change to actors via PUT', async () => {
     const Melissa = await Actor.create({
       name: 'Melissa McCarthy',
       dob: '1988-09-29T00:00:00.000Z',

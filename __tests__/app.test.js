@@ -219,7 +219,7 @@ describe('Actor routes', () => {
       ...Melissa.toJSON(),
       name: 'Melissa McCarthy',
       dob:'1988-09-29T00:00:00.000Z',
-      pob: 'Illinois',
+      pob: 'New York',
       updatedAt: expect.any(String),
       createdAt: expect.any(String)
     });
@@ -230,12 +230,12 @@ describe('Actor routes', () => {
       .post('/api/v1/actors')
       .send({
         name: 'Lauren Graham',
-        dob: 1969 - 12 - 31,
+        dob: '1988-09-29T00:00:00.000Z',
         pob: 'Hawaii'
       });
 
     const res = await request(app)
-      .delete(`/api/v1/actors/${Lauren}`);
+      .delete(`/api/v1/actors/${Lauren.id}`);
 
     expect(res.body).not.toEqual(Lauren.body);
   });

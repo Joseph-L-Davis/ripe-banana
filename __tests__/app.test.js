@@ -56,7 +56,7 @@ describe('Studio routes', () => {
     
   });
 
-  it('get all studios', async () => {
+  it.only('get all studios', async () => {
     const J = await request(app)
       .post('/api/v1/studios')
       .send({
@@ -88,7 +88,7 @@ describe('Studio routes', () => {
 
 
 
-    expect(res.body).toEqual([J.body, K.body, A.body]);
+    expect(res.body).toEqual([{ id: 1, name: 'Studio J' }, { id: 2, name: 'Studio K' }, { id: 3, name: 'Studio A' }]);
   });
 
   it('make a change to a studio PUT', async () => {

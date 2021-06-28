@@ -56,7 +56,7 @@ describe('Studio routes', () => {
     
   });
 
-  it.only('get all studios', async () => {
+  it('get all studios', async () => {
     await Studio.bulkCreate(
       [{ 
         name: 'Studio J',
@@ -179,19 +179,24 @@ describe('Actor routes', () => {
     });
   });
 
-  it('finds all actors via GET', async () => {
-    const Hugh = await request(app)
-      .post('/api/v1/actors')
-      .send({
+  it.only('finds all actors via GET', async () => {
+    await Actor.bulkCreate(
+      [{
         name: 'Hugh Jackman',
         dob: '1970-01-01T00:00:00.010Z',
         pob: 'Australia'
-      });
+      },
+      {
+        name: 'Melissa McCarthy',
+        dob:'1988-09-29T00:00:00.000Z',
+        pob: 'Illinois'
+      }
+      ]);
    
     const res = await request(app)
       .get('/api/v1/actors');
 
-    expect(res.body).toEqual([Hugh.body]);
+    expect(res.body).toEqual([{ id: 1, name: 'Hugh Jackman' }, { id: 2, name: 'Melissa McCarthy' }]);
 
   });
 

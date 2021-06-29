@@ -345,7 +345,7 @@ describe('Reviewer routes', () => {
 
 });
 
-describe('film routes', () => {
+describe.only('film routes', () => {
   beforeEach(() => {
     return sequelize.sync({ force: true });
   });
@@ -368,7 +368,7 @@ describe('film routes', () => {
     });
   });
 
-  it.only('GET all films', async () => {
+  it('GET all films', async () => {
     await request(app)
       .get('/api/v1/films')
       .send({

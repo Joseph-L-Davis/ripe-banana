@@ -342,4 +342,51 @@ describe('Reviewer routes', () => {
 
     expect(res.body).not.toEqual(olderKaren.body);
   });
+
+});
+
+describe.only('film routes', () => {
+  beforeEach(() => {
+    return sequelize.sync({ force: true });
+  });
+
+  it('POST a film', async () => {
+    const res = await request(app)
+      .post('/api/v1/films')
+      .send({
+        title: 'dawn of dead',
+        studio: 3,
+        released: 2000
+      });
+    expect(res.body).toEqual({
+      id: 1,
+      title: 'dawn of dead',
+      studio: '3',
+      released: 2000,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+  });
+
+  it('GET all films', async () => {
+    await request(app)
+      .get('/api/v1/films')
+      .send({
+        title: 'dawn of dead',
+        studio: 3,
+        released: 2000
+      });
+
+    const res = await request(app)
+      .get('/api/v1/films');
+    expect(res.body).toEqual({
+      id: 1,
+      title: 'dawn of dead',
+      studio: '3',
+      released: 2000,
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String)
+    });
+
+  });
 });
